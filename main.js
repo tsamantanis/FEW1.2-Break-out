@@ -155,7 +155,7 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      lives--;
+      lives -= 1;
       if (!lives) {
         // alert('GAME OVER');
         document.location.reload();
