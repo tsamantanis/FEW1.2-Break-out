@@ -14,6 +14,10 @@ const brickOffsetTop = 30;
 const brickOffsetLeft = [30, 10, 50];
 const color = '#5BC0EB';
 const colors = ['#FDE74C', '#9BC53D', '#C3423F'];
+const ARROW_RIGHT = 'ArrowRight';
+const ARROW_LEFT = 'ArrowLeft';
+const RIGHT = 'RIGHT';
+const LEFT = 'LEFT';
 const bricks = [];
 
 let x = canvas.width / 2;
@@ -34,17 +38,17 @@ for (let c = 0; c < brickColumnCount; c += 1) {
 }
 
 function keyDownHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
+  if (e.key === RIGHT || e.key === ARROW_RIGHT) {
     rightPressed = true;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+  } else if (e.key === LEFT || e.key === ARROW_LEFT) {
     leftPressed = true;
   }
 }
 
 function keyUpHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
+  if (e.key === RIGHT || e.key === ARROW_RIGHT) {
     rightPressed = false;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+  } else if (e.key === LEFT || e.key === ARROW_LEFT) {
     leftPressed = false;
   }
 }
@@ -134,15 +138,7 @@ function drawBackground() {
   ctx.closePath();
 }
 
-function draw() {
-  drawBackground();
-  drawBricks();
-  drawBall();
-  drawPaddle();
-  drawScore();
-  drawLives();
-  collisionDetection();
-
+function collisionCanvas() {
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
@@ -165,7 +161,9 @@ function draw() {
       }
     }
   }
+}
 
+function collisionPaddle() {
   if (rightPressed) {
     paddleX += 7;
     if (paddleX + paddleWidth > canvas.width) {
@@ -177,14 +175,32 @@ function draw() {
       paddleX = 0;
     }
   }
-
-  x += dx;
-  y += dy;
-  // requestAnimationFrame(draw);
 }
 
-document.addEventListener('keydown', keyDownHandler);
-document.addEventListener('keyup', keyUpHandler);
-document.addEventListener('mousemove', mouseMoveHandler);
+function moveBall() {
+  x += dx;
+  y += dy;
+}
+
+function checkKeys() {
+  document.addEventListener('keydown', keyDownHandler);
+  document.addEventListener('keyup', keyUpHandler);
+  document.addEventListener('mousemove', mouseMoveHandler);
+}
+
+function draw() {
+  drawBackground();
+  drawBricks();
+  drawBall();
+  drawPaddle();
+  drawScore();
+  drawLives();
+  collisionDetection();
+  collisionCanvas();
+  collisionPaddle();
+  moveBall();
+  checkKeys();
+  // requestAnimationFrame(draw);
+}
 
 draw();
