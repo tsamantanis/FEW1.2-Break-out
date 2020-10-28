@@ -126,8 +126,16 @@ function drawLives() {
   ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
 }
 
+function drawBackground() {
+  ctx.beginPath();
+  ctx.rect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#202A25';
+  ctx.fill();
+  ctx.closePath();
+}
+
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground();
   drawBricks();
   drawBall();
   drawPaddle();
