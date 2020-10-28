@@ -18,6 +18,7 @@ const ARROW_RIGHT = 'ArrowRight';
 const ARROW_LEFT = 'ArrowLeft';
 const RIGHT = 'RIGHT';
 const LEFT = 'LEFT';
+const font = '16px Arial';
 const bricks = [];
 
 let x = canvas.width / 2;
@@ -33,7 +34,11 @@ let lives = 3;
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
+    bricks[c][r] = {
+      x: c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3],
+      y: r * (brickHeight + brickPadding) + brickOffsetTop,
+      status: 1,
+    };
   }
 }
 
@@ -104,12 +109,8 @@ function drawBricks() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
       if (bricks[c][r].status === 1) {
-        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3];
-        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
         ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
         ctx.fillStyle = colors[r % 3];
         ctx.fill();
         ctx.closePath();
@@ -119,13 +120,13 @@ function drawBricks() {
 }
 
 function drawScore() {
-  ctx.font = '16px Arial';
+  ctx.font = font;
   ctx.fillStyle = color;
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
 function drawLives() {
-  ctx.font = '16px Arial';
+  ctx.font = font;
   ctx.fillStyle = color;
   ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
 }
