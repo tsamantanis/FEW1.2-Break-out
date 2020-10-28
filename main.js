@@ -5,13 +5,13 @@ const ctx = canvas.getContext('2d');
 const ballRadius = 10;
 const paddleHeight = 10;
 const paddleWidth = 75;
-const brickRowCount = 3;
+const brickRowCount = 5;
 const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
+const brickOffsetLeft = [30, 10, 50];
 const color = '#5BC0EB';
 const colors = ['#FDE74C', '#9BC53D', '#C3423F'];
 const bricks = [];
@@ -100,7 +100,7 @@ function drawBricks() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
       if (bricks[c][r].status === 1) {
-        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3];
         const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
         bricks[c][r].x = brickX;
         bricks[c][r].y = brickY;
