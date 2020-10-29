@@ -373,7 +373,7 @@ function draw() {
   collisionPaddle();
   moveBall();
   checkKeys();
-  // requestAnimationFrame(draw);
+  requestAnimationFrame(draw);
 }
 
 draw();
