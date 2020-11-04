@@ -14,7 +14,6 @@ const brickOffsetTop = 30;
 const brickOffsetLeft = [30, 10, 50];
 const color = '#5BC0EB';
 const colors = ['#FDE74C', '#9BC53D', '#C3423F'];
-const ballColors = ['#E9AFA3', '#6320EE', '#D7F9F1', '#FF4365', '#F18805', '#D95D39', '#9C528B'];
 const colorPrimary = 'rgba(134, 250, 243, 0.8)';
 const colorSecondary = 'rgba(134, 160, 250, 0.8)';
 const backgroundLineWidth = 3.5;
@@ -35,7 +34,6 @@ let rightPressed = false;
 let leftPressed = false;
 let score = 0;
 let lives = 3;
-let ballColor = color;
 
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
@@ -71,9 +69,7 @@ function mouseMoveHandler(e) {
   }
 }
 
-function changeBallColor() {
-  ballColor = ballColors[score % 7];
-}
+// ball.changeBallColor(score)
 
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
@@ -89,7 +85,7 @@ function collisionDetection() {
           dy = -dy;
           b.status = 0;
           score += 1;
-          changeBallColor();
+          //ball.changeBallColor(score);
           if (score === brickRowCount * brickColumnCount) {
             // alert('YOU WIN, CONGRATS!');
             document.location.reload();
@@ -98,14 +94,6 @@ function collisionDetection() {
       }
     }
   }
-}
-
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = ballColor;
-  ctx.fill();
-  ctx.closePath();
 }
 
 function drawPaddle() {
