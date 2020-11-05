@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import TypeObject from './TypeObject.js';
 
 class Paddle extends TypeObject {

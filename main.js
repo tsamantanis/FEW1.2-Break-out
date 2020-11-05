@@ -1,12 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable operator-linebreak */
 import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 import Brick from './Brick.js';
-
+import Label from './Label.js';
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
-const ballRadius = 10;
 const paddleWidth = 75;
 const paddleHeight = 10;
 const brickRowCount = 5;
@@ -118,17 +118,7 @@ function drawBricks() {
   }
 }
 
-function drawScore() {
-  ctx.font = font;
-  ctx.fillStyle = color;
-  ctx.fillText(`Score: ${score}`, 8, 20);
-}
 
-function drawLives() {
-  ctx.font = font;
-  ctx.fillStyle = color;
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
-}
 
 function drawBackground() {
   ctx.beginPath();
@@ -300,13 +290,13 @@ function drawBackground() {
 }
 
 function collisionCanvas() {
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+  if (ball.x + dx > canvas.width - ball.radius || ball.x + dx < ball.radius) {
     dx = -dx;
   }
-  if (y + dy < ballRadius) {
+  if (ball.y + dy < ball.radius) {
     dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
+  } else if (ball.y + dy > canvas.height - ball.radius) {
+    if (ball.x > paddle.x && ball.x < paddleX + paddle.width) {
       dy = -dy;
     } else {
       lives -= 1;
@@ -314,11 +304,11 @@ function collisionCanvas() {
         // alert('GAME OVER');
         document.location.reload();
       } else {
-        x = canvas.width / 2;
-        y = canvas.height - 30;
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height - 30;
         dx = 2;
         dy = -2;
-        paddleX = (canvas.width - paddleWidth) / 2;
+        paddle.x = (canvas.width - paddleWidth) / 2;
       }
     }
   }
@@ -349,8 +339,10 @@ function draw() {
   drawBricks();
   ball.render(ctx);
   paddle.render(ctx, canvas);
-  drawScore();
-  drawLives();
+  const scoreLabel = new Label(8, 20, color, font, 'Score ', 'left', score);
+  const livesLabel = new Label(canvas.width - 65, 20, color, font, 'Lives ', 'left', lives);
+  scoreLabel.render(ctx);
+  livesLabel.render(ctx);
   collisionDetection();
   collisionCanvas();
   collisionPaddle();
