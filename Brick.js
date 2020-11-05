@@ -1,10 +1,15 @@
-import TypeObject from './TypeObject';
+import TypeObject from './TypeObject.js';
 
 class Brick extends TypeObject {
-  constructor(x, y, color, width, height) {
+  constructor(x, y, color, width, height, status = 1) {
     super(x, y, color);
     this.width = width;
     this.height = height;
+    this.status = status;
+  }
+
+  setStatus(status) {
+    this.status = status;
   }
 
   render(ctx) {

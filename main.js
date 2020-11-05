@@ -1,10 +1,14 @@
 /* eslint-disable operator-linebreak */
+import Ball from './Ball.js';
+import Paddle from './Paddle.js';
+import Brick from './Brick.js';
+
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 const ballRadius = 10;
-const paddleHeight = 10;
 const paddleWidth = 75;
+const paddleHeight = 10;
 const brickRowCount = 5;
 const brickColumnCount = 5;
 const brickWidth = 75;
@@ -35,14 +39,22 @@ let leftPressed = false;
 let score = 0;
 let lives = 3;
 
+const ball = new Ball(x, y, color);
+const paddle = new Paddle(
+  (canvas.width - paddleWidth) / 2, y, color, paddleWidth, paddleHeight,
+);
+
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c][r] = {
-      x: c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3],
-      y: r * (brickHeight + brickPadding) + brickOffsetTop,
-      status: 1,
-    };
+    bricks[c][r] = new Brick(
+      c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3],
+      r * (brickHeight + brickPadding) + brickOffsetTop,
+      colors[r % 3],
+      brickWidth,
+      brickHeight,
+      1,
+    );
   }
 }
 
@@ -65,7 +77,7 @@ function keyUpHandler(e) {
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
-    paddleX = relativeX - paddleWidth / 2;
+    paddleX = relativeX - paddle.width / 2;
   }
 }
 
@@ -77,15 +89,15 @@ function collisionDetection() {
       const b = bricks[c][r];
       if (b.status === 1) {
         if (
-          x > b.x &&
-          x < b.x + brickWidth &&
-          y > b.y &&
-          y < b.y + brickHeight
+          ball.x > b.x &&
+          ball.x < b.x + brickWidth &&
+          ball.y > b.y &&
+          ball.y < b.y + brickHeight
         ) {
           dy = -dy;
-          b.status = 0;
+          b.setStatus(0);
           score += 1;
-          //ball.changeBallColor(score);
+          ball.changeBallColor(score);
           if (score === brickRowCount * brickColumnCount) {
             // alert('YOU WIN, CONGRATS!');
             document.location.reload();
@@ -96,23 +108,11 @@ function collisionDetection() {
   }
 }
 
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.closePath();
-}
-
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
       if (bricks[c][r].status === 1) {
-        ctx.beginPath();
-        ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
-        ctx.fillStyle = colors[r % 3];
-        ctx.fill();
-        ctx.closePath();
+        bricks[c][r].render(ctx);
       }
     }
   }
@@ -338,11 +338,6 @@ function collisionPaddle() {
   }
 }
 
-function moveBall() {
-  x += dx;
-  y += dy;
-}
-
 function checkKeys() {
   document.addEventListener('keydown', keyDownHandler);
   document.addEventListener('keyup', keyUpHandler);
@@ -352,14 +347,14 @@ function checkKeys() {
 function draw() {
   drawBackground();
   drawBricks();
-  drawBall();
-  drawPaddle();
+  ball.render(ctx);
+  paddle.render(ctx, canvas);
   drawScore();
   drawLives();
   collisionDetection();
   collisionCanvas();
   collisionPaddle();
-  moveBall();
+  ball.moveBy(dx, dy);
   checkKeys();
   requestAnimationFrame(draw);
 }

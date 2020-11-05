@@ -1,4 +1,4 @@
-import TypeObject from './TypeObject';
+import TypeObject from './TypeObject.js';
 
 class Paddle extends TypeObject {
   constructor(x, y, color, width, height) {
