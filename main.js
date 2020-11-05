@@ -4,6 +4,7 @@ import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 import Brick from './Brick.js';
 import Label from './Label.js';
+
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -20,17 +21,22 @@ const color = '#5BC0EB';
 const colors = ['#FDE74C', '#9BC53D', '#C3423F'];
 const colorPrimary = 'rgba(134, 250, 243, 0.8)';
 const colorSecondary = 'rgba(134, 160, 250, 0.8)';
-const backgroundLineWidth = 3.5;
-const backgroundOffset = 10;
 const ARROW_RIGHT = 'ArrowRight';
 const ARROW_LEFT = 'ArrowLeft';
 const RIGHT = 'RIGHT';
 const LEFT = 'LEFT';
 const font = '16px Arial';
 const bricks = [];
-
-let x = canvas.width / 2;
-let y = canvas.height - 30;
+const radians = [
+  Math.PI / 2,
+  3 * (Math.PI / 4),
+  Math.PI,
+  5 * (Math.PI / 4),
+  (3 * Math.PI) / 2,
+  (7 * Math.PI) / 4,
+  2 * Math.PI];
+const x = canvas.width / 2;
+const y = canvas.height - 30;
 let dx = 3;
 let dy = -3;
 let paddleX = (canvas.width - paddleWidth) / 2;
@@ -118,7 +124,31 @@ function drawBricks() {
   }
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
+function generateArcPositionPairs(arcRadius, arcWidth) {
+  const arcPositionPairs = [];
+  for (let k = arcRadius; k < canvas.width; k += 5 * arcWidth) {
+    arcPositionPairs.push({
+      x: radians[getRandomInt(radians.length)],
+      y: radians[getRandomInt(radians.length)],
+      arcRadius: k,
+    });
+  }
+  return arcPositionPairs;
+}
+
+function drawArcs(arcPositions, arcWidth) {
+  arcPositions.forEach((position) => {
+    ctx.beginPath();
+    ctx.arc(x, y / 2, position.arcRadius, position.x, position.y);
+    ctx.strokeStyle = getRandomInt() % 2 === 0 ? colorPrimary : colorSecondary;
+    ctx.lineWidth = arcWidth;
+    ctx.stroke();
+  });
+}
 
 function drawBackground() {
   ctx.beginPath();
@@ -127,166 +157,9 @@ function drawBackground() {
   ctx.fill();
   ctx.closePath();
 
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (0 * backgroundOffset), 0, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (1 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (3 * backgroundOffset), 180, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (4 * backgroundOffset), 90, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (4 * backgroundOffset), 30, Math.PI / 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (5 * backgroundOffset), 180, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (6 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (6 * backgroundOffset), 20, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (7 * backgroundOffset), 180, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (8 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (9 * backgroundOffset), 60, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2,
-    2 + (10 * backgroundOffset), Math.PI * (5 / 3), Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (11 * backgroundOffset), 180, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (12 * backgroundOffset), Math.PI / 6, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (12 * backgroundOffset), 30, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2,
-    2 + (13 * backgroundOffset), Math.PI * (3 / 4), Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2,
-    2 + (14 * backgroundOffset), Math.PI * (2 / 3), Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (15 * backgroundOffset), 0, Math.PI / 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (16 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (16 * backgroundOffset), Math.PI / 2, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2,
-    2 + (17 * backgroundOffset), Math.PI / 2, Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (18 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (19 * backgroundOffset), Math.PI, Math.PI / 24);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (19 * backgroundOffset), 0, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorPrimary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 2 + (20 * backgroundOffset), Math.PI / 3, Math.PI);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2,
-    2 + (21 * backgroundOffset), Math.PI * (3 / 4), Math.PI * 2);
-  ctx.lineWidth = backgroundLineWidth;
-  ctx.strokeStyle = colorSecondary;
-  ctx.stroke();
+  const arcRadius = 100;
+  const arcWidth = 100;
+  drawArcs(generateArcPositionPairs(arcRadius), arcWidth);
 }
 
 function collisionCanvas() {
