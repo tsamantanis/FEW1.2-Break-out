@@ -68,8 +68,6 @@ function mouseMoveHandler(e) {
   }
 }
 
-// ball.changeBallColor(score)
-
 function collisionDetection() {
   for (let c = 0; c < bricks.cols; c += 1) {
     for (let r = 0; r < bricks.rows; r += 1) {
@@ -94,6 +92,39 @@ function collisionDetection() {
     }
   }
 }
+
+function collisionCanvas() {
+  if (ball.x + dx > canvas.width - ball.radius || ball.x + dx < ball.radius) {
+    dx = -dx;
+  }
+  if (ball.y + dy < ball.radius) {
+    dy = -dy;
+  } else if (ball.y + dy > canvas.height - ball.radius) {
+    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+      dy = -dy;
+    } else {
+      lives -= 1;
+      if (!lives) {
+        // alert('GAME OVER');
+        document.location.reload();
+      } else {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddle.x = (canvas.width - paddle.width) / 2;
+      }
+    }
+  }
+}
+
+function checkKeys() {
+  document.addEventListener('keydown', keyDownHandler);
+  document.addEventListener('keyup', keyUpHandler);
+  document.addEventListener('mousemove', mouseMoveHandler);
+}
+
+// Draw background function and helpers
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -133,49 +164,32 @@ function drawBackground() {
   drawArcs(generateArcPositionPairs(arcRadius), arcWidth);
 }
 
-function collisionCanvas() {
-  if (ball.x + dx > canvas.width - ball.radius || ball.x + dx < ball.radius) {
-    dx = -dx;
-  }
-  if (ball.y + dy < ball.radius) {
-    dy = -dy;
-  } else if (ball.y + dy > canvas.height - ball.radius) {
-    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-      dy = -dy;
-    } else {
-      lives -= 1;
-      if (!lives) {
-        // alert('GAME OVER');
-        document.location.reload();
-      } else {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
-        paddle.x = (canvas.width - paddle.width) / 2;
-      }
-    }
-  }
-}
-
-function checkKeys() {
-  document.addEventListener('keydown', keyDownHandler);
-  document.addEventListener('keyup', keyUpHandler);
-  document.addEventListener('mousemove', mouseMoveHandler);
-}
-
 function draw() {
+  // background
   drawBackground();
+
+  // bricks
   bricks.render(ctx);
+
+  // ball
   ball.render(ctx);
+  ball.moveBy(dx, dy);
+
+  // paddle
   paddle.render(ctx, canvas);
+  paddle.collisions(canvas, rightPressed, leftPressed);
+
+  // labels
   scoreLabel.render(ctx);
   livesLabel.render(ctx);
+
+  // collisions
   collisionDetection();
   collisionCanvas();
-  paddle.collisions(canvas, rightPressed, leftPressed);
-  ball.moveBy(dx, dy);
+
+  // controls
   checkKeys();
+
   requestAnimationFrame(draw);
 }
 
