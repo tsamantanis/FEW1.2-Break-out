@@ -4,6 +4,7 @@ import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 import Label from './Label.js';
 import Bricks from './Bricks.js';
+import drawBackground from './background_helper.js';
 
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
@@ -13,21 +14,11 @@ const paddleHeight = 10;
 const brickWidth = 75;
 const brickHeight = 20;
 const color = '#5BC0EB';
-const colorPrimary = 'rgba(134, 250, 243, 0.8)';
-const colorSecondary = 'rgba(134, 160, 250, 0.8)';
 const ARROW_RIGHT = 'ArrowRight';
 const ARROW_LEFT = 'ArrowLeft';
 const RIGHT = 'RIGHT';
 const LEFT = 'LEFT';
 const font = '16px Arial';
-const radians = [
-  Math.PI / 2,
-  3 * (Math.PI / 4),
-  Math.PI,
-  5 * (Math.PI / 4),
-  (3 * Math.PI) / 2,
-  (7 * Math.PI) / 4,
-  2 * Math.PI];
 const x = canvas.width / 2;
 const y = canvas.height - 30;
 let dx = 3;
@@ -120,49 +111,9 @@ function checkKeys() {
   document.addEventListener('mousemove', mouseMoveHandler);
 }
 
-// Draw background function and helpers
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
-function generateArcPositionPairs(arcRadius, arcWidth) {
-  const arcPositionPairs = [];
-  for (let k = arcRadius; k < canvas.width; k += 5 * arcWidth) {
-    arcPositionPairs.push({
-      x: radians[getRandomInt(radians.length)],
-      y: radians[getRandomInt(radians.length)],
-      arcRadius: k,
-    });
-  }
-  return arcPositionPairs;
-}
-
-function drawArcs(arcPositions, arcWidth) {
-  arcPositions.forEach((position) => {
-    ctx.beginPath();
-    ctx.arc(x, y / 2, position.arcRadius, position.x, position.y);
-    ctx.strokeStyle = getRandomInt() % 2 === 0 ? colorPrimary : colorSecondary;
-    ctx.lineWidth = arcWidth;
-    ctx.stroke();
-  });
-}
-
-function drawBackground() {
-  ctx.beginPath();
-  ctx.rect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#202A25';
-  ctx.fill();
-  ctx.closePath();
-
-  const arcRadius = 100;
-  const arcWidth = 100;
-  drawArcs(generateArcPositionPairs(arcRadius), arcWidth);
-}
-
 function draw() {
   // background
-  drawBackground();
+  drawBackground(ctx, canvas);
 
   // bricks
   bricks.render(ctx);
