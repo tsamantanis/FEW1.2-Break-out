@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
-import TypeObject from './TypeObject.js';
+import Sprite from './Sprite.js';
 
-class Label extends TypeObject {
+class Label extends Sprite {
   constructor(x, y, color, font, text, align, value) {
     super(x, y, color);
     this.font = font;

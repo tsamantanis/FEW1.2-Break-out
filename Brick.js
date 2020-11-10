@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
-import TypeObject from './TypeObject.js';
+import Sprite from './Sprite.js';
 
-class Brick extends TypeObject {
+class Brick extends Sprite {
   constructor(x, y, color, width, height, status = 1) {
     super(x, y, color);
     this.width = width;

@@ -1,9 +1,9 @@
 /* eslint-disable import/extensions */
-import TypeObject from './TypeObject.js';
+import Sprite from './Sprite.js';
 
 const ballColors = ['#E9AFA3', '#6320EE', '#D7F9F1', '#FF4365', '#F18805', '#D95D39', '#9C528B'];
 
-class Ball extends TypeObject {
+class Ball extends Sprite {
   constructor(x, y, color, radius = 10) {
     super(x, y, color);
     this.radius = radius;
