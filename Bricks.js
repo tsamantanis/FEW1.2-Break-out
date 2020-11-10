@@ -15,27 +15,30 @@ class Bricks {
   }
 
   setup(brickWidth, brickHeight) {
-    for (let c = 0; c < this.cols; c += 1) {
-      this.bricks[c] = [];
-      for (let r = 0; r < this.rows; r += 1) {
-        this.bricks[c][r] = new Brick(
-          c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3],
-          r * (brickHeight + brickPadding) + brickOffsetTop,
-          colors[r % 3],
-          brickWidth,
-          brickHeight,
-          1,
-        );
+    const total = this.cols * this.rows;
+    let r = 0;
+    let c = 0;
+    for (let i = 0; i < total; i += 1) {
+      if (i > 0 && i % this.cols === 0) {
+        r += 1;
+        c = 0;
       }
+      this.bricks[i] = new Brick(
+        c * (brickWidth + brickPadding) + brickOffsetLeft[r % 3],
+        r * (brickHeight + brickPadding) + brickOffsetTop,
+        colors[r % 3],
+        brickWidth,
+        brickHeight,
+        1,
+      );
+      c += 1;
     }
   }
 
   render(ctx) {
-    for (let c = 0; c < this.cols; c += 1) {
-      for (let r = 0; r < this.rows; r += 1) {
-        if (this.bricks[c][r].status === 1) {
-          this.bricks[c][r].render(ctx);
-        }
+    for (let i = 0; i < this.cols * this.rows; i += 1) {
+      if (this.bricks[i].status === 1) {
+        this.bricks[i].render(ctx);
       }
     }
   }

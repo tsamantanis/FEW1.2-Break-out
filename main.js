@@ -69,25 +69,22 @@ function mouseMoveHandler(e) {
 }
 
 function collisionDetection() {
-  for (let c = 0; c < bricks.cols; c += 1) {
-    for (let r = 0; r < bricks.rows; r += 1) {
-      const b = bricks.bricks[c][r];
-      // console.log(ball.x < b.x + b.width);
-      if (
-        b.status === 1 &&
-        ball.x > b.x &&
-        ball.x < b.x + b.width &&
-        ball.y > b.y &&
-        ball.y < b.y + b.height
-      ) {
-        dy = -dy;
-        b.setStatus(0);
-        score += 1;
-        ball.changeBallColor(score);
-        if (score === bricks.rows * bricks.cols) {
-          // alert('YOU WIN, CONGRATS!');
-          document.location.reload();
-        }
+  for (let i = 0; i < bricks.cols * bricks.rows; i += 1) {
+    const b = bricks.bricks[i];
+    if (
+      b.status === 1 &&
+      ball.x > b.x &&
+      ball.x < b.x + b.width &&
+      ball.y > b.y &&
+      ball.y < b.y + b.height
+    ) {
+      dy = -dy;
+      b.setStatus(0);
+      score += 1;
+      ball.changeBallColor(score);
+      if (score === bricks.rows * bricks.cols) {
+        // alert('YOU WIN, CONGRATS!');
+        document.location.reload();
       }
     }
   }
