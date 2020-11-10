@@ -36,11 +36,11 @@ class Bricks {
   }
 
   render(ctx) {
-    for (let i = 0; i < this.cols * this.rows; i += 1) {
-      if (this.bricks[i].status === 1) {
-        this.bricks[i].render(ctx);
+    this.bricks.forEach((brick) => {
+      if (brick.status === 1) {
+        brick.render(ctx);
       }
-    }
+    });
   }
 }
 
