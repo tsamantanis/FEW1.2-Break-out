@@ -1,40 +1,30 @@
 /* eslint-disable import/extensions */
 /* eslint-disable operator-linebreak */
-import Ball from './Ball.js';
-import Paddle from './Paddle.js';
-import Label from './Label.js';
-import Bricks from './Bricks.js';
 import drawBackground from './background_helper.js';
 
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
+import {
+  ctx,
+  canvas,
+  brickWidth,
+  brickHeight,
+  ARROW_RIGHT,
+  ARROW_LEFT,
+  RIGHT,
+  LEFT,
+  ball,
+  paddle,
+  bricks,
+} from './variables.js';
 
-const paddleWidth = 75;
-const paddleHeight = 10;
-const brickWidth = 75;
-const brickHeight = 20;
-const color = '#5BC0EB';
-const ARROW_RIGHT = 'ArrowRight';
-const ARROW_LEFT = 'ArrowLeft';
-const RIGHT = 'RIGHT';
-const LEFT = 'LEFT';
-const font = '16px Arial';
-const x = canvas.width / 2;
-const y = canvas.height - 30;
-let dx = 3;
-let dy = -3;
+import checkCollisions, {
+  dx,
+  dy,
+  livesLabel,
+  scoreLabel,
+} from './collisions_helper.js';
+
 let rightPressed = false;
 let leftPressed = false;
-let score = 0;
-let lives = 3;
-
-const ball = new Ball(x, y, color);
-const paddle = new Paddle(
-  (canvas.width - paddleWidth) / 2, y, color, paddleWidth, paddleHeight,
-);
-const scoreLabel = new Label(8, 20, color, font, 'Score ', 'left', score);
-const livesLabel = new Label(canvas.width - 65, 20, color, font, 'Lives ', 'left', lives);
-const bricks = new Bricks();
 
 function keyDownHandler(e) {
   if (e.key === RIGHT || e.key === ARROW_RIGHT) {
@@ -56,51 +46,6 @@ function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
     paddle.moveTo(relativeX - paddle.width / 2, paddle.y);
-  }
-}
-
-function collisionDetection() {
-  bricks.bricks.forEach((b) => {
-    if (
-      b.status === 1 &&
-      ball.x > b.x &&
-      ball.x < b.x + b.width &&
-      ball.y > b.y &&
-      ball.y < b.y + b.height
-    ) {
-      dy = -dy;
-      b.setStatus(0);
-      score += 1;
-      ball.changeBallColor(score);
-      if (score === bricks.rows * bricks.cols) {
-        // alert('YOU WIN, CONGRATS!');
-        document.location.reload();
-      }
-    }
-  });
-}
-
-function collisionCanvas() {
-  if (ball.x + dx > canvas.width - ball.radius || ball.x + dx < ball.radius) {
-    dx = -dx;
-  }
-  if (ball.y + dy < ball.radius) {
-    dy = -dy;
-  } else if (ball.y + dy > canvas.height - ball.radius) {
-    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-      dy = -dy;
-    } else {
-      lives -= 1;
-      if (!lives) {
-        // alert('GAME OVER');
-        document.location.reload();
-      } else {
-        ball.moveTo(canvas.width / 2, canvas.height - 30);
-        dx = 2;
-        dy = -2;
-        paddle.moveTo((canvas.width - paddle.width) / 2, paddle.y);
-      }
-    }
   }
 }
 
@@ -130,8 +75,7 @@ function draw() {
   livesLabel.render(ctx);
 
   // collisions
-  collisionDetection();
-  collisionCanvas();
+  checkCollisions();
 
   // controls
   checkKeys();
