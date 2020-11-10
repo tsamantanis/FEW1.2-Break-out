@@ -7,10 +7,6 @@ import {
   canvas,
   brickWidth,
   brickHeight,
-  ARROW_RIGHT,
-  ARROW_LEFT,
-  RIGHT,
-  LEFT,
   ball,
   paddle,
   bricks,
@@ -23,37 +19,10 @@ import checkCollisions, {
   scoreLabel,
 } from './collisions_helper.js';
 
-let rightPressed = false;
-let leftPressed = false;
-
-function keyDownHandler(e) {
-  if (e.key === RIGHT || e.key === ARROW_RIGHT) {
-    rightPressed = true;
-  } else if (e.key === LEFT || e.key === ARROW_LEFT) {
-    leftPressed = true;
-  }
-}
-
-function keyUpHandler(e) {
-  if (e.key === RIGHT || e.key === ARROW_RIGHT) {
-    rightPressed = false;
-  } else if (e.key === LEFT || e.key === ARROW_LEFT) {
-    leftPressed = false;
-  }
-}
-
-function mouseMoveHandler(e) {
-  const relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX > 0 && relativeX < canvas.width) {
-    paddle.moveTo(relativeX - paddle.width / 2, paddle.y);
-  }
-}
-
-function checkKeys() {
-  document.addEventListener('keydown', keyDownHandler);
-  document.addEventListener('keyup', keyUpHandler);
-  document.addEventListener('mousemove', mouseMoveHandler);
-}
+import checkKeys, {
+  rightPressed,
+  leftPressed,
+} from './keyPressed_helper.js';
 
 function draw() {
   // background
