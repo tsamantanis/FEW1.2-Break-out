@@ -60,8 +60,7 @@ function mouseMoveHandler(e) {
 }
 
 function collisionDetection() {
-  for (let i = 0; i < bricks.cols * bricks.rows; i += 1) {
-    const b = bricks.bricks[i];
+  bricks.bricks.forEach((b) => {
     if (
       b.status === 1 &&
       ball.x > b.x &&
@@ -78,7 +77,7 @@ function collisionDetection() {
         document.location.reload();
       }
     }
-  }
+  });
 }
 
 function collisionCanvas() {
