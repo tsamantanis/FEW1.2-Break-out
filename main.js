@@ -64,7 +64,7 @@ function keyUpHandler(e) {
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
-    paddle.x = relativeX - paddle.width / 2;
+    paddle.moveTo(relativeX - paddle.width / 2, paddle.y);
   }
 }
 
@@ -105,11 +105,10 @@ function collisionCanvas() {
         // alert('GAME OVER');
         document.location.reload();
       } else {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height - 30;
+        ball.moveTo(canvas.width / 2, canvas.height - 30);
         dx = 2;
         dy = -2;
-        paddle.x = (canvas.width - paddle.width) / 2;
+        paddle.moveTo((canvas.width - paddle.width) / 2, paddle.y);
       }
     }
   }
